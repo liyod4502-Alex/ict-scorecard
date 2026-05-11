@@ -3,692 +3,554 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ICT Pre-Trade Scorecard</title>
+<title>Mushrit ICT Pre-Trade Scorecard</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0a0c0f;
-    --bg2: #111318;
-    --bg3: #1a1d24;
-    --bg4: #22262f;
-    --border: rgba(255,255,255,0.07);
-    --border2: rgba(255,255,255,0.12);
-    --text: #e8eaf0;
-    --text2: #8b909e;
-    --text3: #555a66;
-    --green: #00d492;
-    --green-dim: rgba(0,212,146,0.12);
-    --green-border: rgba(0,212,146,0.3);
-    --blue: #3b8beb;
-    --blue-dim: rgba(59,139,235,0.1);
-    --blue-border: rgba(59,139,235,0.3);
-    --amber: #f5a623;
-    --amber-dim: rgba(245,166,35,0.1);
-    --amber-border: rgba(245,166,35,0.3);
-    --red: #f0504a;
-    --red-dim: rgba(240,80,74,0.1);
-    --red-border: rgba(240,80,74,0.3);
-    --radius: 8px;
-    --radius-lg: 12px;
-  }
+:root{
+  --bg:#0a0c0f;--bg2:#111318;--bg3:#1a1d24;--bg4:#22262f;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
+  --text:#e8eaf0;--text2:#8b909e;--text3:#555a66;
+  --green:#00d492;--green-dim:rgba(0,212,146,0.1);--green-b:rgba(0,212,146,0.28);
+  --blue:#3b8beb;--blue-dim:rgba(59,139,235,0.1);--blue-b:rgba(59,139,235,0.28);
+  --amber:#f5a623;--amber-dim:rgba(245,166,35,0.1);--amber-b:rgba(245,166,35,0.28);
+  --red:#f0504a;--red-dim:rgba(240,80,74,0.1);--red-b:rgba(240,80,74,0.28);
+  --purple:#9b7fe8;--purple-dim:rgba(155,127,232,0.1);--purple-b:rgba(155,127,232,0.28);
+  --r:8px;--rl:12px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Syne',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:2rem 1rem 5rem}
+.wrap{max-width:760px;margin:0 auto}
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border)}
+.hlogo{font-size:10px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--green);font-family:'DM Mono',monospace}
+h1{font-size:21px;font-weight:700;letter-spacing:-.02em;margin-top:3px}
+.clk{text-align:right;font-family:'DM Mono',monospace}
+.clk-t{font-size:17px;font-weight:500;display:block}
+.spill{display:inline-block;font-size:10px;padding:3px 9px;border-radius:99px;margin-top:5px;font-weight:500;letter-spacing:.04em;font-family:'DM Mono',monospace}
+.spill.on{background:var(--green-dim);color:var(--green);border:1px solid var(--green-b)}
+.spill.off{background:var(--bg3);color:var(--text3);border:1px solid var(--border)}
 
-  body {
-    font-family: 'Syne', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    padding: 2rem 1rem 4rem;
-  }
+.slbl{font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--text3);font-family:'DM Mono',monospace;margin:1.4rem 0 .55rem}
 
-  .container { max-width: 720px; margin: 0 auto; }
+/* TIER PANEL */
+.tp{border:1px solid var(--border2);border-radius:var(--rl);overflow:hidden;margin-bottom:.5rem}
+.tp-hdr{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;background:var(--bg2);cursor:pointer;user-select:none}
+.tp-left{display:flex;align-items:center;gap:10px}
+.tp-lbl{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text2);font-family:'DM Mono',monospace}
+.tp-badges{display:flex;gap:4px}
+.tb{font-size:9px;padding:2px 7px;border-radius:99px;font-family:'DM Mono',monospace;font-weight:600}
+.tb-ap{background:var(--green-dim);color:var(--green);border:1px solid var(--green-b)}
+.tb-a {background:var(--blue-dim);color:var(--blue);border:1px solid var(--blue-b)}
+.tb-b {background:var(--amber-dim);color:var(--amber);border:1px solid var(--amber-b)}
+.tb-c {background:var(--purple-dim);color:var(--purple);border:1px solid var(--purple-b)}
+.tb-sk{background:var(--red-dim);color:var(--red);border:1px solid var(--red-b)}
+.tp-chev{font-size:14px;color:var(--text3);transition:transform .2s}
+.tp.open .tp-chev{transform:rotate(180deg)}
+.tp-body{display:none;overflow-x:auto}
+.tp.open .tp-body{display:block}
 
-  header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    margin-bottom: 2rem;
-    padding-bottom: 1.5rem;
-    border-bottom: 1px solid var(--border);
-  }
+.tgrid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));min-width:540px}
+.tcol{padding:12px 10px;border-right:1px solid var(--border);display:flex;flex-direction:column}
+.tcol:last-child{border-right:none}
+.tc-h{font-size:14px;font-weight:700;margin-bottom:2px}
+.tc-s{font-size:9px;font-family:'DM Mono',monospace;letter-spacing:.04em;margin-bottom:8px;padding-bottom:7px;border-bottom:1px solid var(--border)}
+.tc-ap .tc-h{color:var(--green)} .tc-ap .tc-s{color:#008f62}
+.tc-a  .tc-h{color:var(--blue)}  .tc-a  .tc-s{color:#1e65bb}
+.tc-b  .tc-h{color:var(--amber)} .tc-b  .tc-s{color:#a97200}
+.tc-c  .tc-h{color:var(--purple)}.tc-c  .tc-s{color:#6e48c0}
+.tc-sk .tc-h{color:var(--red)}   .tc-sk .tc-s{color:#b22020}
+.tc-row{font-size:10px;color:var(--text3);font-family:'DM Mono',monospace;margin-bottom:3px;display:flex;gap:5px;align-items:flex-start;line-height:1.4}
+.td{width:4px;height:4px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.td-ap{background:var(--green)}.td-a{background:var(--blue)}.td-b{background:var(--amber)}.td-c{background:var(--purple)}.td-sk{background:var(--red)}
+.tc-risk{margin-top:auto;padding-top:8px;border-top:1px solid var(--border)}
+.tc-rv{font-size:16px;font-weight:700;font-family:'DM Mono',monospace;color:var(--text)}
+.tc-rp{font-size:9px;color:var(--text3);font-family:'DM Mono',monospace;margin-top:2px}
+.tc-exit{padding:8px 10px 10px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:4px}
+.te-row{display:flex;gap:6px;align-items:flex-start;font-size:10px;color:var(--text3);font-family:'DM Mono',monospace;line-height:1.4}
+.te-n{flex-shrink:0;font-size:9px;font-weight:600;padding:1px 4px;border-radius:3px;margin-top:1px}
+.en-ap{background:var(--green-dim);color:var(--green)}.en-a{background:var(--blue-dim);color:var(--blue)}.en-b{background:var(--amber-dim);color:var(--amber)}.en-c{background:var(--purple-dim);color:var(--purple)}.en-sk{background:var(--red-dim);color:var(--red)}
 
-  .logo-area { display: flex; flex-direction: column; gap: 4px; }
+/* DIRECTION */
+.dir-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.dir-btn{padding:11px;border-radius:var(--r);border:1px solid var(--border2);background:var(--bg2);color:var(--text2);font-family:'Syne',sans-serif;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:all .13s}
+.dir-btn:hover{background:var(--bg3)}
+.dir-btn.bull{background:var(--green-dim);border-color:var(--green-b);color:var(--green)}
+.dir-btn.bear{background:var(--red-dim);border-color:var(--red-b);color:var(--red)}
+.au{display:inline-block;width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-bottom:8px solid currentColor}
+.ad{display:inline-block;width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:8px solid currentColor}
 
-  .logo {
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: .18em;
-    text-transform: uppercase;
-    color: var(--green);
-    font-family: 'DM Mono', monospace;
-  }
+/* CHECKLIST */
+.ck-stack{display:flex;flex-direction:column;gap:5px}
+.ck-row{display:flex;align-items:center;gap:12px;padding:11px 14px;background:var(--bg2);border-radius:var(--r);border:1px solid var(--border);cursor:pointer;transition:all .12s;user-select:none}
+.ck-row:hover{border-color:var(--border2);background:var(--bg3)}
+.ck-row.on{border-color:var(--green-b);background:rgba(0,212,146,0.05)}
+.ck-row.on .cbox{background:var(--green);border-color:var(--green)}
+.ck-row.on .cbox::after{opacity:1}
+.cbox{width:18px;height:18px;border-radius:4px;border:1.5px solid var(--border2);background:var(--bg3);flex-shrink:0;position:relative;transition:all .12s}
+.cbox::after{content:'';position:absolute;top:3px;left:5px;width:5px;height:8px;border:2px solid var(--bg);border-top:none;border-left:none;transform:rotate(45deg);opacity:0;transition:opacity .1s}
+.ctx{flex:1}
+.cm{font-size:13px;color:var(--text);font-weight:500}
+.cs{font-size:11px;color:var(--text3);margin-top:2px;font-family:'DM Mono',monospace}
+.tag{font-size:9px;padding:2px 7px;border-radius:99px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;font-family:'DM Mono',monospace;flex-shrink:0}
+.t-req{background:var(--red-dim);color:var(--red);border:1px solid var(--red-b)}
+.t-ap{background:var(--green-dim);color:var(--green);border:1px solid var(--green-b)}
+.t-bst{background:var(--amber-dim);color:var(--amber);border:1px solid var(--amber-b)}
 
-  h1 {
-    font-size: 22px;
-    font-weight: 700;
-    letter-spacing: -.02em;
-    color: var(--text);
-  }
+/* SELECTOR ROWS */
+.sel-row{display:flex;align-items:center;gap:12px;padding:11px 14px;background:var(--bg2);border-radius:var(--r);border:1px solid var(--border);flex-wrap:wrap}
+.sel-lbl{font-size:13px;font-weight:500;color:var(--text);flex:1;min-width:120px}
+.sel-lbl span{font-size:11px;color:var(--text3);display:block;font-family:'DM Mono',monospace;margin-top:2px}
+.sbtns{display:flex;gap:5px;flex-wrap:wrap}
+.sbtn{padding:5px 10px;border-radius:6px;border:1px solid var(--border2);background:var(--bg3);color:var(--text2);font-family:'DM Mono',monospace;font-size:11px;cursor:pointer;transition:all .12s;white-space:nowrap}
+.sbtn:hover{color:var(--text)}
+.sb-strong{background:var(--green-dim);border-color:var(--green-b);color:var(--green)}
+.sb-flat{background:var(--purple-dim);border-color:var(--purple-b);color:var(--purple)}
+.sb-against{background:var(--red-dim);border-color:var(--red-b);color:var(--red)}
+.sb-1r{background:var(--purple-dim);border-color:var(--purple-b);color:var(--purple)}
+.sb-b{background:var(--amber-dim);border-color:var(--amber-b);color:var(--amber)}
+.sb-a{background:var(--blue-dim);border-color:var(--blue-b);color:var(--blue)}
+.sb-skip{background:var(--red-dim);border-color:var(--red-b);color:var(--red)}
 
-  .live-clock {
-    font-family: 'DM Mono', monospace;
-    font-size: 13px;
-    color: var(--text2);
-    text-align: right;
-    line-height: 1.6;
-  }
+/* COUNTER */
+.cnt-row{display:flex;align-items:center;gap:12px;padding:11px 14px;background:var(--bg2);border-radius:var(--r);border:1px solid var(--border)}
+.cnt-lbl{font-size:13px;font-weight:500;color:var(--text);flex:1}
+.cnt-lbl span{font-size:11px;color:var(--text3);display:block;font-family:'DM Mono',monospace;margin-top:2px}
+.cnt-ctrl{display:flex;align-items:center;gap:8px}
+.cnt-v{font-family:'DM Mono',monospace;font-size:16px;font-weight:500;color:var(--text);min-width:20px;text-align:center}
+.cnt-v.lim{color:var(--red)}
+.cnt-btn{width:26px;height:26px;border-radius:6px;border:1px solid var(--border2);background:var(--bg3);color:var(--text2);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .12s;line-height:1}
+.cnt-btn:hover{background:var(--bg4);color:var(--text)}
 
-  .ct-time { font-size: 18px; font-weight: 500; color: var(--text); display: block; }
+/* RESULT */
+.result{margin-top:1.5rem;border-radius:var(--rl);overflow:hidden;animation:fup .2s ease}
+@keyframes fup{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.rh{padding:1.2rem 1.4rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+.rg{font-size:25px;font-weight:700;letter-spacing:-.03em}
+.rd{font-size:12px;color:var(--text2);margin-top:3px;font-family:'DM Mono',monospace}
+.rdot{width:11px;height:11px;border-radius:50%;animation:pulse 2s infinite;flex-shrink:0}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.r-ap{border:1px solid var(--green-b)} .r-ap .rh{background:rgba(0,212,146,0.05)} .r-ap .rg{color:var(--green)} .r-ap .rdot{background:var(--green)}
+.r-a {border:1px solid var(--blue-b)}  .r-a  .rh{background:rgba(59,139,235,0.05)} .r-a  .rg{color:var(--blue)}  .r-a  .rdot{background:var(--blue)}
+.r-b {border:1px solid var(--amber-b)} .r-b  .rh{background:rgba(245,166,35,0.05)} .r-b  .rg{color:var(--amber)} .r-b  .rdot{background:var(--amber)}
+.r-c {border:1px solid var(--purple-b)}.r-c  .rh{background:rgba(155,127,232,0.05)}.r-c  .rg{color:var(--purple)}.r-c  .rdot{background:var(--purple)}
+.r-skip{border:1px solid var(--red-b)} .r-skip .rh{background:rgba(240,80,74,0.05)} .r-skip .rg{color:var(--red)}  .r-skip .rdot{background:var(--red)}
+.r-pend{border:1px solid var(--border2)}.r-pend .rh{background:var(--bg2)}.r-pend .rg{color:var(--text3)}.r-pend .rdot{background:var(--text3);animation:none}
 
-  .session-pill {
-    display: inline-block;
-    font-size: 10px;
-    font-family: 'DM Mono', monospace;
-    padding: 3px 9px;
-    border-radius: 99px;
-    margin-top: 4px;
-    font-weight: 500;
-    letter-spacing: .05em;
-  }
-  .session-pill.active { background: var(--green-dim); color: var(--green); border: 1px solid var(--green-border); }
-  .session-pill.inactive { background: var(--bg3); color: var(--text3); border: 1px solid var(--border); }
+.metrics{display:grid;grid-template-columns:repeat(4,1fr)}
+.metric{padding:.9rem 1.1rem;border-right:1px solid var(--border);background:var(--bg2)}
+.metric:last-child{border-right:none}
+.mlbl{font-size:10px;font-family:'DM Mono',monospace;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px}
+.mval{font-size:22px;font-weight:700;letter-spacing:-.02em}
+.msub{font-size:10px;color:var(--text3);font-family:'DM Mono',monospace;margin-top:2px}
 
-  .section-label {
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: .14em;
-    text-transform: uppercase;
-    color: var(--text3);
-    font-family: 'DM Mono', monospace;
-    margin: 1.5rem 0 .6rem;
-  }
+.exit-panel{background:var(--bg2);border-top:1px solid var(--border);padding:1rem 1.4rem}
+.exit-title{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);font-family:'DM Mono',monospace;margin-bottom:10px}
+.exit-steps{display:flex;flex-direction:column;gap:7px}
+.exit-step{display:flex;gap:9px;align-items:flex-start}
+.enum{font-size:9px;font-weight:600;padding:2px 6px;border-radius:4px;flex-shrink:0;margin-top:2px;font-family:'DM Mono',monospace}
+.etxt{font-size:12px;color:var(--text2);line-height:1.55}
+.etxt b{color:var(--text);font-weight:500}
 
-  .dir-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: .5rem; }
+.rnote{padding:.7rem 1.4rem;background:var(--bg2);border-top:1px solid var(--border);font-size:11px;color:var(--text3);font-family:'DM Mono',monospace;display:flex;align-items:center;gap:7px}
+.dsm{width:5px;height:5px;border-radius:50%;background:var(--text3);flex-shrink:0}
 
-  .dir-btn {
-    padding: 12px;
-    border-radius: var(--radius);
-    border: 1px solid var(--border2);
-    background: var(--bg2);
-    color: var(--text2);
-    font-family: 'Syne', sans-serif;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 7px;
-    transition: all .15s;
-    letter-spacing: .03em;
-  }
-  .dir-btn:hover { border-color: var(--border2); background: var(--bg3); }
-  .dir-btn.bull { background: var(--green-dim); border-color: var(--green-border); color: var(--green); }
-  .dir-btn.bear { background: var(--red-dim); border-color: var(--red-border); color: var(--red); }
+.miss-list{padding:.9rem 1.4rem;background:var(--bg2);display:flex;flex-direction:column;gap:5px}
+.miss-item{font-size:12px;color:var(--text3);font-family:'DM Mono',monospace;display:flex;align-items:center;gap:7px}
+.xd{width:5px;height:5px;border-radius:50%;background:var(--red);flex-shrink:0}
 
-  .arrow-up { display: inline-block; width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-bottom: 8px solid currentColor; }
-  .arrow-down { display: inline-block; width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 8px solid currentColor; }
+.actions{display:flex;gap:8px;margin-top:1.4rem}
+.btn{padding:9px 18px;border-radius:var(--r);border:1px solid var(--border2);background:var(--bg2);color:var(--text2);font-family:'Syne',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .12s}
+.btn:hover{background:var(--bg3);color:var(--text)}
 
-  .check-stack { display: flex; flex-direction: column; gap: 5px; }
+footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.ftxt{font-size:11px;color:var(--text3);font-family:'DM Mono',monospace}
 
-  .check-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 11px 14px;
-    background: var(--bg2);
-    border-radius: var(--radius);
-    border: 1px solid var(--border);
-    cursor: pointer;
-    transition: all .12s;
-    user-select: none;
-  }
-  .check-row:hover { border-color: var(--border2); background: var(--bg3); }
-  .check-row.on { border-color: var(--green-border); background: rgba(0,212,146,0.06); }
-  .check-row.on .check-box { background: var(--green); border-color: var(--green); }
-  .check-row.on .check-box::after { opacity: 1; }
-
-  .check-box {
-    width: 18px; height: 18px;
-    border-radius: 4px;
-    border: 1.5px solid var(--border2);
-    background: var(--bg3);
-    flex-shrink: 0;
-    position: relative;
-    transition: all .12s;
-  }
-  .check-box::after {
-    content: '';
-    position: absolute;
-    top: 3px; left: 5px;
-    width: 5px; height: 8px;
-    border: 2px solid var(--bg);
-    border-top: none; border-left: none;
-    transform: rotate(45deg);
-    opacity: 0;
-    transition: opacity .1s;
-  }
-
-  .check-text { flex: 1; }
-  .check-main { font-size: 13px; color: var(--text); font-weight: 500; }
-  .check-sub { font-size: 11px; color: var(--text3); margin-top: 2px; font-family: 'DM Mono', monospace; }
-
-  .tag {
-    font-size: 9px;
-    padding: 2px 7px;
-    border-radius: 99px;
-    font-weight: 600;
-    letter-spacing: .08em;
-    text-transform: uppercase;
-    font-family: 'DM Mono', monospace;
-    flex-shrink: 0;
-  }
-  .tag-req { background: var(--red-dim); color: var(--red); border: 1px solid var(--red-border); }
-  .tag-ap { background: var(--green-dim); color: var(--green); border: 1px solid var(--green-border); }
-  .tag-boost { background: var(--amber-dim); color: var(--amber); border: 1px solid var(--amber-border); }
-
-  .rr-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 11px 14px;
-    background: var(--bg2);
-    border-radius: var(--radius);
-    border: 1px solid var(--border);
-  }
-  .rr-label { font-size: 13px; font-weight: 500; color: var(--text); flex: 1; }
-  .rr-label span { font-size: 11px; color: var(--text3); display: block; font-family: 'DM Mono', monospace; margin-top: 2px; }
-
-  .rr-btns { display: flex; gap: 5px; }
-  .rr-btn {
-    padding: 5px 12px;
-    border-radius: 6px;
-    border: 1px solid var(--border2);
-    background: var(--bg3);
-    color: var(--text2);
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    cursor: pointer;
-    transition: all .12s;
-  }
-  .rr-btn:hover { border-color: var(--border2); color: var(--text); }
-  .rr-btn.sel-skip { background: var(--red-dim); border-color: var(--red-border); color: var(--red); }
-  .rr-btn.sel-b { background: var(--amber-dim); border-color: var(--amber-border); color: var(--amber); }
-  .rr-btn.sel-a { background: var(--blue-dim); border-color: var(--blue-border); color: var(--blue); }
-
-  .result {
-    margin-top: 1.5rem;
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--border);
-    overflow: hidden;
-    animation: fadeIn .2s ease;
-  }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
-
-  .result-header {
-    padding: 1.25rem 1.5rem;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .result-grade { font-size: 28px; font-weight: 700; letter-spacing: -.03em; }
-  .result-desc { font-size: 13px; color: var(--text2); margin-top: 3px; font-family: 'DM Mono', monospace; }
-
-  .grade-dot {
-    width: 12px; height: 12px;
-    border-radius: 50%;
-    animation: pulse 2s infinite;
-  }
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
-
-  .result.ap { border-color: var(--green-border); }
-  .result.ap .result-header { background: rgba(0,212,146,0.05); }
-  .result.ap .result-grade { color: var(--green); }
-  .result.ap .grade-dot { background: var(--green); }
-
-  .result.a { border-color: var(--blue-border); }
-  .result.a .result-header { background: rgba(59,139,235,0.05); }
-  .result.a .result-grade { color: var(--blue); }
-  .result.a .grade-dot { background: var(--blue); }
-
-  .result.b { border-color: var(--amber-border); }
-  .result.b .result-header { background: rgba(245,166,35,0.05); }
-  .result.b .result-grade { color: var(--amber); }
-  .result.b .grade-dot { background: var(--amber); }
-
-  .result.skip { border-color: var(--red-border); }
-  .result.skip .result-header { background: rgba(240,80,74,0.05); }
-  .result.skip .result-grade { color: var(--red); }
-  .result.skip .grade-dot { background: var(--red); }
-
-  .result.pending .result-grade { color: var(--text3); }
-  .result.pending .grade-dot { background: var(--text3); animation: none; }
-
-  .metrics-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 0;
-  }
-  .metric {
-    padding: 1rem 1.25rem;
-    border-right: 1px solid var(--border);
-    background: var(--bg2);
-  }
-  .metric:last-child { border-right: none; }
-  .metric-lbl { font-size: 10px; font-family: 'DM Mono', monospace; color: var(--text3); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 5px; }
-  .metric-val { font-size: 22px; font-weight: 700; color: var(--text); letter-spacing: -.02em; }
-  .metric-sub { font-size: 11px; color: var(--text3); font-family: 'DM Mono', monospace; margin-top: 3px; }
-
-  .result-note {
-    padding: .75rem 1.5rem;
-    background: var(--bg2);
-    border-top: 1px solid var(--border);
-    font-size: 12px;
-    color: var(--text3);
-    font-family: 'DM Mono', monospace;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .dot-sm { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
-
-  .missing-list {
-    padding: 1rem 1.5rem;
-    background: var(--bg2);
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-  .missing-item {
-    font-size: 12px;
-    color: var(--text3);
-    font-family: 'DM Mono', monospace;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .x-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--red); flex-shrink: 0; }
-
-  .actions {
-    display: flex;
-    gap: 8px;
-    margin-top: 1.5rem;
-  }
-  .btn {
-    padding: 9px 18px;
-    border-radius: var(--radius);
-    border: 1px solid var(--border2);
-    background: var(--bg2);
-    color: var(--text2);
-    font-family: 'Syne', sans-serif;
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all .12s;
-  }
-  .btn:hover { background: var(--bg3); color: var(--text); }
-
-  .trade-count-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 11px 14px;
-    background: var(--bg2);
-    border-radius: var(--radius);
-    border: 1px solid var(--border);
-  }
-  .count-label { font-size: 13px; font-weight: 500; color: var(--text); flex: 1; }
-  .count-label span { font-size: 11px; color: var(--text3); display: block; font-family: 'DM Mono', monospace; margin-top: 2px; }
-  .count-btns { display: flex; align-items: center; gap: 8px; }
-  .count-val { font-family: 'DM Mono', monospace; font-size: 16px; font-weight: 500; color: var(--text); min-width: 20px; text-align: center; }
-  .count-btn {
-    width: 26px; height: 26px;
-    border-radius: 6px;
-    border: 1px solid var(--border2);
-    background: var(--bg3);
-    color: var(--text2);
-    font-size: 16px;
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    transition: all .12s;
-    line-height: 1;
-  }
-  .count-btn:hover { background: var(--bg4); color: var(--text); }
-  .count-limit { color: var(--red); }
-
-  footer {
-    margin-top: 3rem;
-    padding-top: 1rem;
-    border-top: 1px solid var(--border);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .footer-txt { font-size: 11px; color: var(--text3); font-family: 'DM Mono', monospace; }
-  .footer-rule { font-size: 11px; color: var(--text3); font-family: 'DM Mono', monospace; font-style: italic; }
-
-  @media (max-width: 560px) {
-    .metrics-grid { grid-template-columns: repeat(2, 1fr); }
-    .metric { border-bottom: 1px solid var(--border); }
-    h1 { font-size: 18px; }
-    .result-grade { font-size: 22px; }
-  }
+@media(max-width:560px){
+  .metrics{grid-template-columns:repeat(2,1fr)}
+  .metric{border-bottom:1px solid var(--border)}
+  h1{font-size:18px}
+}
 </style>
 </head>
 <body>
-<div class="container">
+<div class="wrap">
 
-  <header>
-    <div class="logo-area">
-      <span class="logo">ICT / SMC</span>
-      <h1>Pre-Trade Scorecard</h1>
-    </div>
-    <div class="live-clock">
-      <span class="ct-time" id="ct-time">--:-- --</span>
-      <span id="session-pill" class="session-pill inactive">Out of session</span>
-    </div>
-  </header>
-
-  <!-- Direction -->
-  <div class="section-label">Trade direction</div>
-  <div class="dir-row">
-    <button class="dir-btn" id="bull-btn" onclick="setDir('bull')">
-      <span class="arrow-up"></span> Bullish
-    </button>
-    <button class="dir-btn" id="bear-btn" onclick="setDir('bear')">
-      <span class="arrow-down"></span> Bearish
-    </button>
+<header>
+  <div>
+    <div class="hlogo">ICT / SMC &middot; Futures</div>
+    <h1>Pre-Trade Scorecard</h1>
   </div>
-
-  <!-- Base filters -->
-  <div class="section-label">Base filters — all required</div>
-  <div class="check-stack" id="base-stack">
-    <div class="check-row" onclick="tog(this)" data-id="session">
-      <div class="check-box"></div>
-      <div class="check-text">
-        <div class="check-main">In session window</div>
-        <div class="check-sub">7:00–10:30 AM CT or 12:00–2:00 PM CT</div>
-      </div>
-      <span class="tag tag-req">Required</span>
-    </div>
-    <div class="check-row" onclick="tog(this)" data-id="bos">
-      <div class="check-box"></div>
-      <div class="check-text">
-        <div class="check-main">BOS confirmed with strong volume</div>
-        <div class="check-sub">Close broke swing H/L on ≥1.5× avg volume</div>
-      </div>
-      <span class="tag tag-req">Required</span>
-    </div>
-    <div class="check-row" onclick="tog(this)" data-id="fvg">
-      <div class="check-box"></div>
-      <div class="check-text">
-        <div class="check-main">Valid FVG formed post-BOS</div>
-        <div class="check-sub">Within 5 bars of displacement candle</div>
-      </div>
-      <span class="tag tag-req">Required</span>
-    </div>
-    <div class="check-row" onclick="tog(this)" data-id="sma">
-      <div class="check-box"></div>
-      <div class="check-text">
-        <div class="check-main">Price on correct side of 50 SMA</div>
-        <div class="check-sub">Above for longs · below for shorts</div>
-      </div>
-      <span class="tag tag-req">Required</span>
-    </div>
-    <div class="check-row" onclick="tog(this)" data-id="t15">
-      <div class="check-box"></div>
-      <div class="check-text">
-        <div class="check-main">15m trend aligned (50 SMA)</div>
-        <div class="check-sub">15m close above/below its 50 SMA</div>
-      </div>
-      <span class="tag tag-req">Required</span>
-    </div>
-    <div class="check-row" onclick="tog(this)" data-id="vwap">
-      <div class="check-box"></div>
-      <div class="check-text">
-        <div class="check-main">VWAP confirms direction</div>
-        <div class="check-sub">Not crossing repeatedly — rotation day → stand down</div>
-      </div>
-      <span class="tag tag-req">Required</span>
-    </div>
+  <div class="clk">
+    <span class="clk-t" id="ct"></span>
+    <span class="spill off" id="spill">Out of session</span>
   </div>
+</header>
 
-  <!-- RR -->
-  <div class="section-label">Projected R:R</div>
-  <div class="rr-row">
-    <div class="rr-label">
-      Risk-to-reward ratio
-      <span>Measure before entry — entry at 10–50% into FVG</span>
+<!-- TIER REFERENCE PANEL -->
+<div class="slbl">Full system &mdash; tier reference</div>
+<div class="tp" id="tp">
+  <div class="tp-hdr" onclick="toggleTier()">
+    <div class="tp-left">
+      <span class="tp-lbl">Trade tiers &amp; risk table</span>
+      <div class="tp-badges">
+        <span class="tb tb-ap">A+</span>
+        <span class="tb tb-a">A</span>
+        <span class="tb tb-b">B</span>
+        <span class="tb tb-c">C</span>
+        <span class="tb tb-sk">Skip</span>
+      </div>
     </div>
-    <div class="rr-btns">
-      <button class="rr-btn" id="rr-skip" onclick="setRR('skip')">Under 1.5R</button>
-      <button class="rr-btn" id="rr-b"    onclick="setRR('b')">1.5–1.9R</button>
-      <button class="rr-btn" id="rr-a"    onclick="setRR('a')">2R+</button>
-    </div>
+    <span class="tp-chev">&#8964;</span>
   </div>
+  <div class="tp-body">
+    <div class="tgrid">
 
-  <!-- Grade boosters -->
-  <div class="section-label">Grade boosters</div>
-  <div class="check-stack">
-    <div class="check-row" onclick="tog(this)" data-id="t1h">
-      <div class="check-box"></div>
-      <div class="check-text">
-        <div class="check-main">1Hr 50 SMA aligns with 15m trend</div>
-        <div class="check-sub">Both TFs pointing same direction</div>
+      <div class="tcol tc-ap">
+        <div class="tc-h">A+</div>
+        <div class="tc-s">Full confluence</div>
+        <div class="tc-row"><span class="td td-ap"></span>RR 2R or better</div>
+        <div class="tc-row"><span class="td td-ap"></span>1Hr + 15m aligned</div>
+        <div class="tc-row"><span class="td td-ap"></span>PDH / PDL raided</div>
+        <div class="tc-row"><span class="td td-ap"></span>AM session only</div>
+        <div class="tc-row"><span class="td td-ap"></span>VWAP sloping strong</div>
+        <div class="tc-row"><span class="td td-ap"></span>BOS + strong volume</div>
+        <div class="tc-risk"><div class="tc-rv">$380</div><div class="tc-rp">2.0% &mdash; max size</div></div>
+        <div class="tc-exit">
+          <div class="te-row"><span class="te-n en-ap">01</span>Close 50% at 1R &mdash; lock immediately</div>
+          <div class="te-row"><span class="te-n en-ap">02</span>Stop to breakeven on runner</div>
+          <div class="te-row"><span class="te-n en-ap">03</span>Runner &rarr; next HTF / 4Hr FVG level</div>
+          <div class="te-row"><span class="te-n en-ap">04</span>Stalls at structure &rarr; close, no giving back</div>
+        </div>
       </div>
-      <span class="tag tag-ap">A+ booster</span>
-    </div>
-    <div class="check-row" onclick="tog(this)" data-id="pdhl">
-      <div class="check-box"></div>
-      <div class="check-text">
-        <div class="check-main">PDH / PDL liquidity raid before entry</div>
-        <div class="check-sub">Price swept prior day level then reversed</div>
+
+      <div class="tcol tc-a">
+        <div class="tc-h">A</div>
+        <div class="tc-s">High confluence</div>
+        <div class="tc-row"><span class="td td-a"></span>RR 2R or better</div>
+        <div class="tc-row"><span class="td td-a"></span>1Hr + 15m aligned</div>
+        <div class="tc-row"><span class="td td-a"></span>VWAP confirming</div>
+        <div class="tc-row"><span class="td td-a"></span>No PDH/PDL or PM ok</div>
+        <div class="tc-row"><span class="td td-a"></span>BOS + strong volume</div>
+        <div class="tc-risk"><div class="tc-rv">$285</div><div class="tc-rp">1.5% &mdash; elevated</div></div>
+        <div class="tc-exit">
+          <div class="te-row"><span class="te-n en-a">01</span>Close 50% at 1R, stop to BE</div>
+          <div class="te-row"><span class="te-n en-a">02</span>Runner to 2R only &mdash; no extensions</div>
+          <div class="te-row"><span class="te-n en-a">03</span>1Hr structure blocking &rarr; close at level</div>
+        </div>
       </div>
-      <span class="tag tag-ap">A+ booster</span>
-    </div>
-    <div class="check-row" onclick="tog(this)" data-id="am">
-      <div class="check-box"></div>
-      <div class="check-text">
-        <div class="check-main">AM session (8:00–10:30 AM CT)</div>
-        <div class="check-sub">Highest institutional volume window</div>
+
+      <div class="tcol tc-b">
+        <div class="tc-h">B</div>
+        <div class="tc-s">Standard</div>
+        <div class="tc-row"><span class="td td-b"></span>RR 1.5R &ndash; 1.9R</div>
+        <div class="tc-row"><span class="td td-b"></span>15m aligned</div>
+        <div class="tc-row"><span class="td td-b"></span>1Hr neutral / flat</div>
+        <div class="tc-row"><span class="td td-b"></span>VWAP confirming</div>
+        <div class="tc-row"><span class="td td-b"></span>BOS + strong volume</div>
+        <div class="tc-risk"><div class="tc-rv">$190</div><div class="tc-rp">1.0% &mdash; base size</div></div>
+        <div class="tc-exit">
+          <div class="te-row"><span class="te-n en-b">01</span>Close 100% at 1.5R&ndash;2R &mdash; no runners</div>
+          <div class="te-row"><span class="te-n en-b">02</span>No move in 3&ndash;5 bars &rarr; exit breakeven</div>
+          <div class="te-row"><span class="te-n en-b">03</span>Must move fast &mdash; no babysitting</div>
+        </div>
       </div>
-      <span class="tag tag-boost">Booster</span>
-    </div>
-    <div class="check-row" onclick="tog(this)" data-id="first">
-      <div class="check-box"></div>
-      <div class="check-text">
-        <div class="check-main">First trade of the day — no prior loss</div>
-        <div class="check-sub">If down on the day → A+ only or stand down</div>
+
+      <div class="tcol tc-c">
+        <div class="tc-h">C</div>
+        <div class="tc-s">Thin confluence</div>
+        <div class="tc-row"><span class="td td-c"></span>RR exactly 1R</div>
+        <div class="tc-row"><span class="td td-c"></span>15m aligned only</div>
+        <div class="tc-row"><span class="td td-c"></span>1Hr neutral or flat</div>
+        <div class="tc-row"><span class="td td-c"></span>VWAP flat / not aligned</div>
+        <div class="tc-row"><span class="td td-c"></span>PM session only</div>
+        <div class="tc-row"><span class="td td-c"></span>BOS present</div>
+        <div class="tc-risk"><div class="tc-rv">$95</div><div class="tc-rp">0.5% &mdash; minimum</div></div>
+        <div class="tc-exit">
+          <div class="te-row"><span class="te-n en-c">01</span>Close 100% at exactly 1R &mdash; no exceptions</div>
+          <div class="te-row"><span class="te-n en-c">02</span>No move in 3 bars &rarr; exit flat</div>
+          <div class="te-row"><span class="te-n en-c">03</span>No runners. No managing. 1R or cut.</div>
+        </div>
       </div>
-      <span class="tag tag-boost">Booster</span>
+
+      <div class="tcol tc-sk">
+        <div class="tc-h">Skip</div>
+        <div class="tc-s">No trade</div>
+        <div class="tc-row"><span class="td td-sk"></span>RR under 1R</div>
+        <div class="tc-row"><span class="td td-sk"></span>VWAP against bias</div>
+        <div class="tc-row"><span class="td td-sk"></span>Counter-trend setup</div>
+        <div class="tc-row"><span class="td td-sk"></span>Daily limit reached</div>
+        <div class="tc-row"><span class="td td-sk"></span>After loss &mdash; not A+</div>
+        <div class="tc-row"><span class="td td-sk"></span>VWAP crossing / chop</div>
+        <div class="tc-risk"><div class="tc-rv">$0</div><div class="tc-rp">Stand down</div></div>
+        <div class="tc-exit">
+          <div class="te-row"><span class="te-n en-sk">--</span>No entry &mdash; wait for next valid setup</div>
+        </div>
+      </div>
+
     </div>
   </div>
-
-  <!-- Trade counter -->
-  <div class="section-label">Daily trade counter</div>
-  <div class="trade-count-row">
-    <div class="count-label">
-      Trades taken today
-      <span>Max 3 per day · A+ only after a loss</span>
-    </div>
-    <div class="count-btns">
-      <button class="count-btn" onclick="adjCount(-1)">−</button>
-      <span class="count-val" id="trade-count">0</span>
-      <button class="count-btn" onclick="adjCount(1)">+</button>
-    </div>
-  </div>
-
-  <!-- Result -->
-  <div id="result-area"></div>
-
-  <div class="actions">
-    <button class="btn" onclick="resetAll()">↺ Reset scorecard</button>
-  </div>
-
-  <footer>
-    <span class="footer-txt">MNQ · MES · MGC — $19,000 account</span>
-    <span class="footer-rule">Consistency > Frequency. Selectivity > Activity.</span>
-  </footer>
-
 </div>
 
-<script>
-var dir = null;
-var rr = null;
-var tradeCount = 0;
-var MAX_TRADES = 3;
+<!-- DIRECTION -->
+<div class="slbl">Trade direction</div>
+<div class="dir-row">
+  <button class="dir-btn" id="bull-btn" onclick="setDir('bull')"><span class="au"></span> Bullish</button>
+  <button class="dir-btn" id="bear-btn" onclick="setDir('bear')"><span class="ad"></span> Bearish</button>
+</div>
 
-function setDir(d) {
-  dir = d;
-  document.getElementById('bull-btn').className = 'dir-btn' + (d==='bull' ? ' bull' : '');
-  document.getElementById('bear-btn').className = 'dir-btn' + (d==='bear' ? ' bear' : '');
+<!-- BASE FILTERS -->
+<div class="slbl">Base filters &mdash; all required</div>
+<div class="ck-stack">
+  <div class="ck-row" onclick="tog(this)" data-id="sess">
+    <div class="cbox"></div>
+    <div class="ctx"><div class="cm">In session window</div><div class="cs">7:00&ndash;10:30 AM CT or 12:00&ndash;2:00 PM CT</div></div>
+    <span class="tag t-req">Required</span>
+  </div>
+  <div class="ck-row" onclick="tog(this)" data-id="bos">
+    <div class="cbox"></div>
+    <div class="ctx"><div class="cm">BOS confirmed with strong volume</div><div class="cs">Close broke swing H/L on &ge;1.5&times; avg volume</div></div>
+    <span class="tag t-req">Required</span>
+  </div>
+  <div class="ck-row" onclick="tog(this)" data-id="fvg">
+    <div class="cbox"></div>
+    <div class="ctx"><div class="cm">Valid FVG formed post-BOS</div><div class="cs">Within 5 bars of displacement candle</div></div>
+    <span class="tag t-req">Required</span>
+  </div>
+  <div class="ck-row" onclick="tog(this)" data-id="sma">
+    <div class="cbox"></div>
+    <div class="ctx"><div class="cm">Price on correct side of 50 SMA</div><div class="cs">Above for longs &middot; below for shorts</div></div>
+    <span class="tag t-req">Required</span>
+  </div>
+  <div class="ck-row" onclick="tog(this)" data-id="t15">
+    <div class="cbox"></div>
+    <div class="ctx"><div class="cm">15m trend aligned (50 SMA)</div><div class="cs">15m close above / below its 50 SMA</div></div>
+    <span class="tag t-req">Required</span>
+  </div>
+</div>
+
+<!-- VWAP STATE -->
+<div class="slbl">VWAP state &mdash; determines grade ceiling</div>
+<div class="sel-row">
+  <div class="sel-lbl">VWAP condition<span>Sloping strong &rarr; A+/A eligible &middot; Flat &rarr; C ceiling &middot; Against &rarr; skip</span></div>
+  <div class="sbtns">
+    <button class="sbtn" id="vwap-strong"  onclick="setV('strong')">Sloping strong</button>
+    <button class="sbtn" id="vwap-flat"    onclick="setV('flat')">Flat / not aligned</button>
+    <button class="sbtn" id="vwap-against" onclick="setV('against')">Against direction</button>
+  </div>
+</div>
+
+<!-- RR -->
+<div class="slbl">Projected R:R</div>
+<div class="sel-row">
+  <div class="sel-lbl">Risk-to-reward ratio<span>Measure before entry &middot; enter at 10&ndash;50% into FVG</span></div>
+  <div class="sbtns">
+    <button class="sbtn" id="rr-skip" onclick="setRR('skip')">Under 1R</button>
+    <button class="sbtn" id="rr-1r"   onclick="setRR('1r')">Exactly 1R</button>
+    <button class="sbtn" id="rr-b"    onclick="setRR('b')">1.5R &ndash; 1.9R</button>
+    <button class="sbtn" id="rr-a"    onclick="setRR('a')">2R+</button>
+  </div>
+</div>
+
+<!-- BOOSTERS -->
+<div class="slbl">Grade boosters</div>
+<div class="ck-stack">
+  <div class="ck-row" onclick="tog(this)" data-id="t1h">
+    <div class="cbox"></div>
+    <div class="ctx"><div class="cm">1Hr 50 SMA aligns with 15m trend</div><div class="cs">Both timeframes pointing same direction</div></div>
+    <span class="tag t-ap">A+ booster</span>
+  </div>
+  <div class="ck-row" onclick="tog(this)" data-id="pdhl">
+    <div class="cbox"></div>
+    <div class="ctx"><div class="cm">PDH / PDL liquidity raid before entry</div><div class="cs">Price swept prior day level then reversed</div></div>
+    <span class="tag t-ap">A+ booster</span>
+  </div>
+  <div class="ck-row" onclick="tog(this)" data-id="am">
+    <div class="cbox"></div>
+    <div class="ctx"><div class="cm">AM session (8:00&ndash;10:30 AM CT)</div><div class="cs">Highest institutional volume window</div></div>
+    <span class="tag t-bst">Booster</span>
+  </div>
+  <div class="ck-row" onclick="tog(this)" data-id="first">
+    <div class="cbox"></div>
+    <div class="ctx"><div class="cm">First trade of the day &mdash; no prior loss</div><div class="cs">After a loss &rarr; A+ only or stand down</div></div>
+    <span class="tag t-bst">Booster</span>
+  </div>
+</div>
+
+<!-- COUNTER -->
+<div class="slbl">Daily trade counter</div>
+<div class="cnt-row">
+  <div class="cnt-lbl">Trades taken today<span>Max 3 per day &middot; A+ only after a loss</span></div>
+  <div class="cnt-ctrl">
+    <button class="cnt-btn" onclick="adj(-1)">&#8722;</button>
+    <span class="cnt-v" id="tc">0</span>
+    <button class="cnt-btn" onclick="adj(1)">&#43;</button>
+  </div>
+</div>
+
+<div id="result-area"></div>
+
+<div class="actions">
+  <button class="btn" onclick="reset()">&#8635; Reset scorecard</button>
+</div>
+
+<footer>
+  <span class="ftxt">MNQ &middot; MES &middot; MGC &mdash; $19,000 account</span>
+  <span class="ftxt">Consistency &gt; Frequency &middot; Selectivity &gt; Activity</span>
+</footer>
+
+</div>
+<script>
+var dir=null,rr=null,vwap=null,tc=0,MAX=3;
+
+function toggleTier(){document.getElementById('tp').classList.toggle('open');}
+
+function setDir(d){
+  dir=d;
+  document.getElementById('bull-btn').className='dir-btn'+(d==='bull'?' bull':'');
+  document.getElementById('bear-btn').className='dir-btn'+(d==='bear'?' bear':'');
   grade();
 }
 
-function setRR(r) {
-  rr = r;
-  ['skip','b','a'].forEach(function(x) {
-    var el = document.getElementById('rr-'+x);
-    el.className = 'rr-btn' + (x===r ? ' sel-'+x : '');
+function setV(v){
+  vwap=v;
+  ['strong','flat','against'].forEach(function(x){
+    document.getElementById('vwap-'+x).className='sbtn'+(x===v?' sb-'+x:'');
   });
   grade();
 }
 
-function tog(row) {
-  row.classList.toggle('on');
+function setRR(r){
+  rr=r;
+  ['skip','1r','b','a'].forEach(function(x){
+    document.getElementById('rr-'+x).className='sbtn'+(x===r?' sb-'+x:'');
+  });
   grade();
 }
 
-function checked(id) {
-  var el = document.querySelector('[data-id="'+id+'"]');
-  return el ? el.classList.contains('on') : false;
+function tog(row){row.classList.toggle('on');grade();}
+
+function chk(id){
+  var el=document.querySelector('[data-id="'+id+'"]');
+  return el?el.classList.contains('on'):false;
 }
 
-function adjCount(d) {
-  tradeCount = Math.max(0, Math.min(MAX_TRADES + 1, tradeCount + d));
-  var el = document.getElementById('trade-count');
-  el.textContent = tradeCount;
-  el.className = 'count-val' + (tradeCount >= MAX_TRADES ? ' count-limit' : '');
+function adj(d){
+  tc=Math.max(0,Math.min(MAX+1,tc+d));
+  var el=document.getElementById('tc');
+  el.textContent=tc;el.className='cnt-v'+(tc>=MAX?' lim':'');
   grade();
 }
 
-function grade() {
-  var basePass = checked('session') && checked('bos') && checked('fvg') && checked('sma') && checked('t15') && checked('vwap');
-  var missing = [];
-  if (!dir) missing.push('Select trade direction');
-  if (!checked('session')) missing.push('Not in session window');
-  if (!checked('bos')) missing.push('BOS not confirmed');
-  if (!checked('fvg')) missing.push('No valid FVG formed');
-  if (!checked('sma')) missing.push('50 SMA not aligned');
-  if (!checked('t15')) missing.push('15m trend not aligned');
-  if (!checked('vwap')) missing.push('VWAP not confirming');
-  if (!rr) missing.push('RR not selected');
+function grade(){
+  var area=document.getElementById('result-area');
+  var basePass=chk('sess')&&chk('bos')&&chk('fvg')&&chk('sma')&&chk('t15');
 
-  var area = document.getElementById('result-area');
+  if(tc>=MAX){area.innerHTML=mkSkip('Daily limit reached ('+tc+'/'+MAX+')','Stand down. Max trades for today hit. Protect the account.');return;}
 
-  if (tradeCount >= MAX_TRADES) {
-    area.innerHTML = buildSkip('Daily limit reached (' + tradeCount + '/' + MAX_TRADES + ')', 'Stand down. Max trades for today hit. Protect the account.');
-    return;
+  var miss=[];
+  if(!dir)       miss.push('Select trade direction');
+  if(!chk('sess')) miss.push('Not in session window');
+  if(!chk('bos'))  miss.push('BOS not confirmed');
+  if(!chk('fvg'))  miss.push('No valid FVG formed');
+  if(!chk('sma'))  miss.push('50 SMA not aligned');
+  if(!chk('t15'))  miss.push('15m trend not aligned');
+  if(!vwap)        miss.push('VWAP state not selected');
+  if(!rr)          miss.push('RR not selected');
+
+  if(!basePass||!vwap||!rr||!dir){
+    var h='<div class="result r-pend"><div class="rh"><div><div class="rg">Incomplete</div><div class="rd">Complete checklist to grade setup</div></div><div class="rdot"></div></div><div class="miss-list">';
+    miss.forEach(function(m){h+='<div class="miss-item"><span class="xd"></span>'+m+'</div>';});
+    h+='</div></div>';area.innerHTML=h;return;
   }
 
-  if (!basePass || !rr || !dir) {
-    var html = '<div class="result pending" style="margin-top:1.5rem;border-radius:12px;border:1px solid var(--border)">';
-    html += '<div class="result-header" style="background:var(--bg2)"><div><div class="result-grade">Incomplete</div><div class="result-desc">Complete checklist to grade setup</div></div><div class="grade-dot" style="background:var(--text3)"></div></div>';
-    html += '<div class="missing-list">';
-    missing.forEach(function(m) { html += '<div class="missing-item"><span class="x-dot"></span>' + m + '</div>'; });
-    html += '</div></div>';
-    area.innerHTML = html;
-    return;
-  }
+  if(rr==='skip'){area.innerHTML=mkSkip('Skip \u2014 under 1R','RR below minimum. Do not take this trade. Wait for a better setup.');return;}
+  if(vwap==='against'){area.innerHTML=mkSkip('Skip \u2014 VWAP against direction','VWAP opposing your bias. Rotation or reversal environment. Stand down.');return;}
 
-  if (rr === 'skip') {
-    area.innerHTML = buildSkip('Skip — sub-1.5R', 'RR below minimum threshold. Do not take. Wait for better setup.');
-    return;
-  }
+  var t1h=chk('t1h'),pdhl=chk('pdhl'),am=chk('am');
+  var vS=(vwap==='strong'),vF=(vwap==='flat');
+  var g,label,desc,risk,pct,note;
 
-  var t1h = checked('t1h');
-  var pdhl = checked('pdhl');
-  var am = checked('am');
-
-  var isAP = rr === 'a' && t1h && pdhl && am;
-  var isA  = rr === 'a' && t1h;
-
-  var g, label, desc, risk, pct, note;
-  if (isAP) {
-    g='ap'; label='A+ Setup'; desc='Full confluence stack. Maximum size.';
-    risk=380; pct='2.0%';
-    note='2R+ · 1Hr/15m aligned · PDH/PDL raided · AM session confirmed';
-  } else if (isA) {
-    g='a'; label='A Setup'; desc='Strong confluence. Elevated size.';
-    risk=285; pct='1.5%';
-    note='2R+ with both timeframes aligned · Missing PDH/PDL raid or AM session';
+  if(rr==='a'&&t1h&&pdhl&&am&&vS){
+    g='ap';label='A+ Setup';desc='Full confluence stack \u2014 maximum size.';risk=380;pct='2.0%';
+    note='2R+ \u00b7 1Hr/15m aligned \u00b7 PDH/PDL raided \u00b7 AM session \u00b7 VWAP sloping strong';
+  } else if(rr==='a'&&t1h&&vS){
+    g='a';label='A Setup';desc='Strong confluence \u2014 elevated size.';risk=285;pct='1.5%';
+    note='2R+ \u00b7 both TFs aligned \u00b7 VWAP confirming \u00b7 missing PDH/PDL raid or AM';
+  } else if((rr==='b'||rr==='a')&&vS){
+    g='b';label='B Setup';desc='Standard confluence \u2014 base size. Must move immediately.';risk=190;pct='1.0%';
+    note='1Hr neutral or RR 1.5\u20131.9R \u00b7 VWAP confirms \u00b7 minimum aggression';
+  } else if(rr==='1r'||(vF&&(rr==='b'||rr==='a'))){
+    g='c';label='C Setup';desc='Thin confluence \u2014 minimum size only. 1R and done.';risk=95;pct='0.5%';
+    note='RR 1R \u00b7 VWAP flat/not aligned \u00b7 15m only \u00b7 PM session \u00b7 no extensions ever';
   } else {
-    g='b'; label='B Setup'; desc='Reduced size. Exit fast if no follow-through.';
-    risk=190; pct='1.0%';
-    note='1Hr neutral or RR 1.5–1.9R · Minimum size only';
+    area.innerHTML=mkSkip('Skip \u2014 conditions not met','Insufficient confluence for any grade. Stand down and wait.');return;
   }
 
-  var mnq = Math.max(1, Math.floor(risk / 100));
-  var mes = Math.max(1, Math.floor(risk / 50));
-  var mgc = Math.max(1, Math.floor(risk / 130));
+  var mnq=Math.max(1,Math.floor(risk/100));
+  var mes=Math.max(1,Math.floor(risk/50));
+  var mgc=Math.max(1,Math.floor(risk/130));
 
-  var html = '<div class="result ' + g + '" style="margin-top:1.5rem">';
-  html += '<div class="result-header"><div><div class="result-grade">' + label + '</div><div class="result-desc">' + desc + '</div></div><div class="grade-dot"></div></div>';
-  html += '<div class="metrics-grid">';
-  html += '<div class="metric"><div class="metric-lbl">Risk $</div><div class="metric-val">$' + risk + '</div><div class="metric-sub">' + pct + ' of $19k</div></div>';
-  html += '<div class="metric"><div class="metric-lbl">MNQ</div><div class="metric-val">' + mnq + '</div><div class="metric-sub">~$100 / contract</div></div>';
-  html += '<div class="metric"><div class="metric-lbl">MES</div><div class="metric-val">' + mes + '</div><div class="metric-sub">~$50 / contract</div></div>';
-  html += '<div class="metric"><div class="metric-lbl">MGC</div><div class="metric-val">' + mgc + '</div><div class="metric-sub">~$130 / contract</div></div>';
-  html += '</div>';
-  html += '<div class="result-note"><span class="dot-sm" style="background:var(--text3)"></span>' + note + '</div>';
-  html += '</div>';
-  area.innerHTML = html;
+  var h='<div class="result r-'+g+'">';
+  h+='<div class="rh"><div><div class="rg">'+label+'</div><div class="rd">'+desc+'</div></div><div class="rdot"></div></div>';
+  h+='<div class="metrics">';
+  h+='<div class="metric"><div class="mlbl">Risk $</div><div class="mval">$'+risk+'</div><div class="msub">'+pct+' of $19k</div></div>';
+  h+='<div class="metric"><div class="mlbl">MNQ</div><div class="mval">'+mnq+'</div><div class="msub">~$100/contract</div></div>';
+  h+='<div class="metric"><div class="mlbl">MES</div><div class="mval">'+mes+'</div><div class="msub">~$50/contract</div></div>';
+  h+='<div class="metric"><div class="mlbl">MGC</div><div class="mval">'+mgc+'</div><div class="msub">~$130/contract</div></div>';
+  h+='</div>';
+  h+=exitBlock(g);
+  h+='<div class="rnote"><span class="dsm"></span>'+note+'</div>';
+  h+='</div>';
+  area.innerHTML=h;
 }
 
-function buildSkip(title, desc) {
-  return '<div class="result skip" style="margin-top:1.5rem"><div class="result-header"><div><div class="result-grade">' + title + '</div><div class="result-desc">' + desc + '</div></div><div class="grade-dot"></div></div></div>';
-}
-
-function resetAll() {
-  dir = null; rr = null;
-  document.getElementById('bull-btn').className = 'dir-btn';
-  document.getElementById('bear-btn').className = 'dir-btn';
-  ['skip','b','a'].forEach(function(x) { document.getElementById('rr-'+x).className = 'rr-btn'; });
-  document.querySelectorAll('.check-row').forEach(function(r) { r.classList.remove('on'); });
-  document.getElementById('result-area').innerHTML = '';
-}
-
-// Live CT clock
-function updateClock() {
-  var now = new Date();
-  var ct = new Intl.DateTimeFormat('en-US', {
-    timeZone: 'America/Chicago',
-    hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true
-  }).format(now);
-  document.getElementById('ct-time').textContent = ct + ' CT';
-
-  var h = parseInt(new Intl.DateTimeFormat('en-US', { timeZone: 'America/Chicago', hour: 'numeric', hour12: false }).format(now));
-  var m = parseInt(new Intl.DateTimeFormat('en-US', { timeZone: 'America/Chicago', minute: '2-digit' }).format(now));
-  var mins = h * 60 + m;
-  var amActive = mins >= 420 && mins < 630;
-  var pmActive = mins >= 720 && mins < 840;
-  var pill = document.getElementById('session-pill');
-  if (amActive) {
-    pill.textContent = 'AM session active';
-    pill.className = 'session-pill active';
-  } else if (pmActive) {
-    pill.textContent = 'PM session active';
-    pill.className = 'session-pill active';
+function exitBlock(g){
+  var steps=[];
+  var c='en-'+g;
+  if(g==='ap'){
+    steps=[[c,'01','Close <b>50% position at 1R</b> \u2014 lock profit immediately.'],[c,'02','Move stop to <b>breakeven</b> on remaining contracts.'],[c,'03','Runner target: next HTF level \u2014 <b>PDH/PDL, PWH/PWL, or 4Hr FVG.</b>'],[c,'04','Stalls at structure? <b>Close runner \u2014 do not give back gains.</b>']];
+  } else if(g==='a'){
+    steps=[[c,'01','Close <b>50% at 1R</b> \u2014 move stop to breakeven on remainder.'],[c,'02','Runner to <b>2R only</b> \u2014 no extensions beyond full target.'],[c,'03','1Hr level blocking runner? <b>Close full position at that level.</b>']];
+  } else if(g==='b'){
+    steps=[[c,'01','<b>Close 100% at 1.5R\u20132R target.</b> No partials. No runners.'],[c,'02','No movement in <b>3\u20135 bars of entry</b>? Exit at breakeven immediately.'],[c,'03','B trades must move fast. <b>No babysitting \u2014 exit or cut.</b>']];
   } else {
-    pill.textContent = 'Out of session';
-    pill.className = 'session-pill inactive';
+    steps=[[c,'01','<b>Close 100% at exactly 1R.</b> No extensions. No runners. No exceptions.'],[c,'02','No movement in <b>3 bars of entry</b>? Exit flat immediately.'],[c,'03','C trades do not get managed. <b>1R hit or you cut. Period.</b>']];
   }
+  var h='<div class="exit-panel"><div class="exit-title">Partial profit &amp; exit rules \u2014 '+g.toUpperCase()+' trade</div><div class="exit-steps">';
+  steps.forEach(function(s){h+='<div class="exit-step"><span class="enum '+s[0]+'">'+s[1]+'</span><span class="etxt">'+s[2]+'</span></div>';});
+  h+='</div></div>';
+  return h;
 }
-updateClock();
-setInterval(updateClock, 1000);
+
+function mkSkip(title,desc){
+  return '<div class="result r-skip"><div class="rh"><div><div class="rg">'+title+'</div><div class="rd">'+desc+'</div></div><div class="rdot"></div></div></div>';
+}
+
+function reset(){
+  dir=null;rr=null;vwap=null;tc=0;
+  document.getElementById('bull-btn').className='dir-btn';
+  document.getElementById('bear-btn').className='dir-btn';
+  ['skip','1r','b','a'].forEach(function(x){document.getElementById('rr-'+x).className='sbtn';});
+  ['strong','flat','against'].forEach(function(x){document.getElementById('vwap-'+x).className='sbtn';});
+  document.querySelectorAll('.ck-row').forEach(function(r){r.classList.remove('on');});
+  var el=document.getElementById('tc');el.textContent='0';el.className='cnt-v';
+  document.getElementById('result-area').innerHTML='';
+}
+
+function updateClock(){
+  var now=new Date();
+  var ct=new Intl.DateTimeFormat('en-US',{timeZone:'America/Chicago',hour:'numeric',minute:'2-digit',second:'2-digit',hour12:true}).format(now);
+  document.getElementById('ct').textContent=ct+' CT';
+  var hh=parseInt(new Intl.DateTimeFormat('en-US',{timeZone:'America/Chicago',hour:'numeric',hour12:false}).format(now));
+  var mm=parseInt(new Intl.DateTimeFormat('en-US',{timeZone:'America/Chicago',minute:'2-digit'}).format(now));
+  var mins=hh*60+mm;
+  var p=document.getElementById('spill');
+  if(mins>=420&&mins<630){p.textContent='AM session active';p.className='spill on';}
+  else if(mins>=720&&mins<840){p.textContent='PM session active';p.className='spill on';}
+  else{p.textContent='Out of session';p.className='spill off';}
+}
+updateClock();setInterval(updateClock,1000);
 </script>
 </body>
 </html>
