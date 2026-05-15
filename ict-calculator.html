@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ICT Trading Calculator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&family=Bebas+Neue&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#07090c; --bg2:#0e1117; --bg3:#151920; --bg4:#1c2028; --bg5:#23272f;
+  --border:rgba(255,255,255,0.06); --border2:rgba(255,255,255,0.11); --border3:rgba(255,255,255,0.18);
+  --text:#dde2ec; --text2:#7c8494; --text3:#454d5c;
+  --green:#00d492; --green-d:rgba(0,212,146,0.12); --green-b:rgba(0,212,146,0.3);
+  --blue:#4a9eff; --blue-d:rgba(74,158,255,0.1); --blue-b:rgba(74,158,255,0.3);
+  --amber:#ffb340; --amber-d:rgba(255,179,64,0.1); --amber-b:rgba(255,179,64,0.3);
+  --red:#ff5a5a; --red-d:rgba(255,90,90,0.1); --red-b:rgba(255,90,90,0.3);
+  --purple:#a78bfa; --purple-d:rgba(167,139,250,0.1); --purple-b:rgba(167,139,250,0.3);
+  --r:6px; --rl:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Syne',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:5rem}
+
+nav{position:sticky;top:0;z-index:100;background:rgba(7,9,12,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:52px}
+.nav-brand{display:flex;align-items:center;gap:12px}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.08em;color:var(--green);line-height:1}
+.nav-sub{font-size:10px;font-family:'DM Mono',monospace;color:var(--text3);letter-spacing:.1em;text-transform:uppercase}
+.nav-links{display:flex;gap:4px}
+.nav-link{font-size:11px;font-family:'DM Mono',monospace;padding:5px 10px;border-radius:var(--r);color:var(--text3);cursor:pointer;transition:all .13s;text-decoration:none;letter-spacing:.04em}
+.nav-link:hover,.nav-link.on{background:var(--bg4);color:var(--text)}
+
+.hero{padding:3rem 2rem 2rem;max-width:1100px;margin:0 auto}
+.hero-tag{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--green);margin-bottom:10px}
+.hero-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(42px,6vw,72px);letter-spacing:.04em;line-height:.95;color:var(--text);margin-bottom:12px}
+.hero-title span{color:var(--green)}
+.hero-desc{font-size:14px;color:var(--text2);max-width:500px;line-height:1.6;font-family:'DM Mono',monospace}
+.hero-stats{display:flex;gap:2rem;margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border);flex-wrap:wrap}
+.hstat{display:flex;flex-direction:column;gap:3px}
+.hstat-val{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:.05em;color:var(--green)}
+.hstat-lbl{font-size:10px;font-family:'DM Mono',monospace;color:var(--text3);letter-spacing:.08em;text-transform:uppercase}
+
+.page{max-width:1100px;margin:0 auto;padding:0 2rem}
+.section{margin-bottom:3rem;animation:fadeUp .3s ease both}
+.sec-header{display:flex;align-items:baseline;gap:12px;margin-bottom:1rem;padding-bottom:.75rem;border-bottom:1px solid var(--border)}
+.sec-num{font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--text3);line-height:1;letter-spacing:.04em}
+.sec-title{font-size:16px;font-weight:600;color:var(--text);letter-spacing:-.01em}
+.sec-sub{font-size:11px;font-family:'DM Mono',monospace;color:var(--text3);margin-left:auto}
+
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);padding:1.25rem;margin-bottom:10px}
+.card-title{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);font-family:'DM Mono',monospace;margin-bottom:1rem}
+
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+@media(max-width:700px){.g4{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:1fr}.g2{grid-template-columns:1fr}}
+
+.inp-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.inp-lbl{font-size:12px;font-family:'DM Mono',monospace;color:var(--text2);min-width:140px;flex-shrink:0}
+.inp-wrap{flex:1;position:relative}
+.inp-prefix{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:12px;font-family:'DM Mono',monospace;color:var(--text3);pointer-events:none}
+input[type=number]{width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);padding:7px 10px;font-size:13px;font-family:'DM Mono',monospace;color:var(--text);outline:none;transition:border-color .12s}
+input[type=number]:focus{border-color:var(--border3)}
+input[type=number].has-prefix{padding-left:22px}
+input[type=range]{width:100%;accent-color:var(--green)}
+.inp-unit{font-size:11px;font-family:'DM Mono',monospace;color:var(--text3);min-width:28px}
+
+.mcard{background:var(--bg3);border-radius:var(--r);padding:12px 14px;border:1px solid var(--border)}
+.mcard.pos{border-color:var(--green-b);background:rgba(0,212,146,0.05)}
+.mcard.neg{border-color:var(--red-b);background:rgba(255,90,90,0.05)}
+.mcard.neu{border-color:var(--blue-b);background:rgba(74,158,255,0.05)}
+.mcard.warn{border-color:var(--amber-b);background:rgba(255,179,64,0.05)}
+.ml{font-size:10px;font-family:'DM Mono',monospace;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px}
+.mv{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:.04em;line-height:1}
+.mv.pos{color:var(--green)}.mv.neg{color:var(--red)}.mv.neu{color:var(--blue)}.mv.warn{color:var(--amber)}
+.ms{font-size:11px;font-family:'DM Mono',monospace;color:var(--text3);margin-top:3px}
+
+.grade-strip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:1rem}
+.gc{border-radius:var(--r);padding:12px;border:1px solid var(--border)}
+.gc-ap{border-color:var(--green-b);background:rgba(0,212,146,0.06)}
+.gc-a {border-color:var(--blue-b);background:rgba(74,158,255,0.06)}
+.gc-b {border-color:var(--amber-b);background:rgba(255,179,64,0.06)}
+.gc-c {border-color:var(--purple-b);background:rgba(167,139,250,0.06)}
+.gc-head{font-size:13px;font-weight:700;margin-bottom:8px}
+.gc-ap .gc-head{color:var(--green)}.gc-a .gc-head{color:var(--blue)}.gc-b .gc-head{color:var(--amber)}.gc-c .gc-head{color:var(--purple)}
+.gc-row{display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px;font-family:'DM Mono',monospace}
+.gc-key{color:var(--text3)}.gc-val{color:var(--text)}
+.gc-ev{font-size:13px;font-weight:600;margin-top:8px;padding-top:8px;border-top:1px solid var(--border);font-family:'DM Mono',monospace}
+
+.chart-outer{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:1rem;margin-top:10px}
+.chart-lbl{font-size:10px;font-family:'DM Mono',monospace;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
+
+.rule-line{display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--bg3);border-radius:var(--r);border:1px solid var(--border);margin-bottom:6px}
+.rule-icon{width:28px;height:28px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;font-family:'DM Mono',monospace;font-weight:600}
+.rule-txt{flex:1;font-size:12px;color:var(--text2);font-family:'DM Mono',monospace}
+.rule-val{font-size:13px;font-weight:600;font-family:'DM Mono',monospace;color:var(--text)}
+
+.sess-table{width:100%;border-collapse:collapse;font-family:'DM Mono',monospace;font-size:12px}
+.sess-table th{text-align:left;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);padding:6px 10px;border-bottom:1px solid var(--border)}
+.sess-table td{padding:8px 10px;border-bottom:1px solid var(--border);color:var(--text2)}
+.sess-table tr:last-child td{border-bottom:none}
+.sess-table td:last-child{text-align:right;font-weight:500;color:var(--text)}
+.badge{display:inline-block;font-size:9px;padding:2px 7px;border-radius:99px;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.b-green{background:var(--green-d);color:var(--green);border:1px solid var(--green-b)}
+.b-blue{background:var(--blue-d);color:var(--blue);border:1px solid var(--blue-b)}
+.b-amber{background:var(--amber-d);color:var(--amber);border:1px solid var(--amber-b)}
+.b-purple{background:var(--purple-d);color:var(--purple);border:1px solid var(--purple-b)}
+
+.prog-wrap{background:var(--bg4);border-radius:99px;height:6px;overflow:hidden;margin-top:6px}
+.prog-bar{height:100%;border-radius:99px;transition:width .3s ease}
+
+footer{max-width:1100px;margin:0 auto;padding:1.5rem 2rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.ftxt{font-size:11px;font-family:'DM Mono',monospace;color:var(--text3)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">
+    <span class="nav-logo">ICT</span>
+    <span class="nav-sub">SMC · Futures</span>
+  </div>
+  <div class="nav-links">
+    <a class="nav-link" href="ict-scorecard.html">Scorecard</a>
+    <a class="nav-link on" href="ict-calculator.html">Calculator</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div style="display:flex;gap:4px;margin-bottom:1.5rem;flex-wrap:wrap">
+    <a href="#ev"          style="font-size:11px;padding:5px 12px;border-radius:6px;text-decoration:none;color:#454d5c;border:1px solid rgba(255,255,255,0.07);font-family:'DM Mono',monospace;letter-spacing:.04em">EV</a>
+    <a href="#drawdown"    style="font-size:11px;padding:5px 12px;border-radius:6px;text-decoration:none;color:#454d5c;border:1px solid rgba(255,255,255,0.07);font-family:'DM Mono',monospace;letter-spacing:.04em">Drawdown</a>
+    <a href="#breakeven"   style="font-size:11px;padding:5px 12px;border-radius:6px;text-decoration:none;color:#454d5c;border:1px solid rgba(255,255,255,0.07);font-family:'DM Mono',monospace;letter-spacing:.04em">Break-even</a>
+    <a href="#compounder"  style="font-size:11px;padding:5px 12px;border-radius:6px;text-decoration:none;color:#454d5c;border:1px solid rgba(255,255,255,0.07);font-family:'DM Mono',monospace;letter-spacing:.04em">Compounder</a>
+  </div>
+  <div class="hero-tag">Trading math · ICT / SMC strategy</div>
+  <div class="hero-title">Expected<br><span>Value</span><br>Dashboard</div>
+  <div class="hero-desc">All calculations live and tied to your exact tier system. Adjust any input — everything updates instantly.</div>
+  <div class="hero-stats">
+    <div class="hstat"><span class="hstat-val">33%</span><span class="hstat-lbl">Break-even WR @ 2R</span></div>
+    <div class="hstat"><span class="hstat-val" id="h-edge" style="color:var(--amber)">—</span><span class="hstat-lbl">Edge per trade</span></div>
+    <div class="hstat"><span class="hstat-val" id="h-annual" style="color:var(--green)">—</span><span class="hstat-lbl">Annual EV</span></div>
+    <div class="hstat"><span class="hstat-val" id="h-ruin" style="color:var(--red)">—</span><span class="hstat-lbl">Ruin risk</span></div>
+  </div>
+</div>
+
+<div class="page">
+
+<!-- ── 01 EXPECTED VALUE ── -->
+<div class="section" id="ev">
+  <div class="sec-header">
+    <span class="sec-num">01</span>
+    <span class="sec-title">Expected Value Calculator</span>
+    <span class="sec-sub">Adjust win rate + grade mix to see full EV</span>
+  </div>
+
+  <div class="g2">
+    <div class="card">
+      <div class="card-title">Global inputs</div>
+      <div class="inp-row">
+        <span class="inp-lbl">Win rate</span>
+        <input type="range" min="25" max="85" value="55" step="1" id="wr" oninput="calcAll()">
+        <span class="inp-unit" id="wr-out">55%</span>
+      </div>
+      <div class="inp-row">
+        <span class="inp-lbl">Trades per day</span>
+        <input type="range" min="1" max="5" value="3" step="1" id="tpd" oninput="calcAll()">
+        <span class="inp-unit" id="tpd-out">3</span>
+      </div>
+      <div class="inp-row">
+        <span class="inp-lbl">Account size</span>
+        <div class="inp-wrap"><span class="inp-prefix">$</span><input type="number" class="has-prefix" id="acct" value="19000" oninput="calcAll()"></div>
+      </div>
+      <div class="inp-row">
+        <span class="inp-lbl">Trading days / yr</span>
+        <input type="range" min="100" max="252" value="200" step="1" id="tdy" oninput="calcAll()">
+        <span class="inp-unit" id="tdy-out">200</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Trade grade mix</div>
+      <div class="inp-row">
+        <span class="inp-lbl" style="color:var(--green)">A+ trades %</span>
+        <input type="range" min="0" max="100" value="20" step="5" id="mix-ap" oninput="normMix()">
+        <span class="inp-unit" id="mix-ap-out">20%</span>
+      </div>
+      <div class="inp-row">
+        <span class="inp-lbl" style="color:var(--blue)">A trades %</span>
+        <input type="range" min="0" max="100" value="40" step="5" id="mix-a" oninput="normMix()">
+        <span class="inp-unit" id="mix-a-out">40%</span>
+      </div>
+      <div class="inp-row">
+        <span class="inp-lbl" style="color:var(--amber)">B trades %</span>
+        <input type="range" min="0" max="100" value="30" step="5" id="mix-b" oninput="normMix()">
+        <span class="inp-unit" id="mix-b-out">30%</span>
+      </div>
+      <div class="inp-row">
+        <span class="inp-lbl" style="color:var(--purple)">C trades %</span>
+        <input type="range" min="0" max="100" value="10" step="5" id="mix-c" oninput="normMix()">
+        <span class="inp-unit" id="mix-c-out">10%</span>
+      </div>
+      <div style="font-size:11px;font-family:'DM Mono',monospace;color:var(--text3);margin-top:4px" id="mix-total">Total: 100%</div>
+    </div>
+  </div>
+
+  <div class="grade-strip" style="margin-top:10px">
+    <div class="gc gc-ap">
+      <div class="gc-head">A+ Setup</div>
+      <div class="gc-row"><span class="gc-key">Risk</span><span class="gc-val">$380</span></div>
+      <div class="gc-row"><span class="gc-key">Target</span><span class="gc-val">2R · $760</span></div>
+      <div class="gc-row"><span class="gc-key">Partial</span><span class="gc-val">50% @ 1R</span></div>
+      <div class="gc-ev" id="ev-ap">EV: —</div>
+    </div>
+    <div class="gc gc-a">
+      <div class="gc-head">A Setup</div>
+      <div class="gc-row"><span class="gc-key">Risk</span><span class="gc-val">$285</span></div>
+      <div class="gc-row"><span class="gc-key">Target</span><span class="gc-val">2R · $570</span></div>
+      <div class="gc-row"><span class="gc-key">Partial</span><span class="gc-val">50% @ 1R</span></div>
+      <div class="gc-ev" id="ev-a">EV: —</div>
+    </div>
+    <div class="gc gc-b">
+      <div class="gc-head">B Setup</div>
+      <div class="gc-row"><span class="gc-key">Risk</span><span class="gc-val">$190</span></div>
+      <div class="gc-row"><span class="gc-key">Target</span><span class="gc-val">1.75R · $333</span></div>
+      <div class="gc-row"><span class="gc-key">Exit</span><span class="gc-val">Full @ target</span></div>
+      <div class="gc-ev" id="ev-b">EV: —</div>
+    </div>
+    <div class="gc gc-c">
+      <div class="gc-head">C Setup</div>
+      <div class="gc-row"><span class="gc-key">Risk</span><span class="gc-val">$95</span></div>
+      <div class="gc-row"><span class="gc-key">Target</span><span class="gc-val">1R · $95</span></div>
+      <div class="gc-row"><span class="gc-key">Exit</span><span class="gc-val">Full @ 1R only</span></div>
+      <div class="gc-ev" id="ev-c">EV: —</div>
+    </div>
+  </div>
+
+  <div class="g4" style="margin-bottom:10px">
+    <div class="mcard" id="mc-daily"><div class="ml">Daily EV</div><div class="mv" id="ev-daily">—</div><div class="ms">avg expected</div></div>
+    <div class="mcard" id="mc-weekly"><div class="ml">Weekly EV</div><div class="mv" id="ev-weekly">—</div><div class="ms">5 trading days</div></div>
+    <div class="mcard" id="mc-monthly"><div class="ml">Monthly EV</div><div class="mv" id="ev-monthly">—</div><div class="ms">21 trading days</div></div>
+    <div class="mcard" id="mc-annual"><div class="ml">Annual EV</div><div class="mv" id="ev-annual">—</div><div class="ms">based on days input</div></div>
+  </div>
+
+  <div class="chart-outer">
+    <div class="chart-lbl">Daily EV curve — win rate 25% → 85%</div>
+    <div style="position:relative;height:200px"><canvas id="ev-chart" role="img" aria-label="Expected value curve from 25% to 85% win rate">EV curve chart.</canvas></div>
+  </div>
+</div>
+
+<!-- ── 02 DRAWDOWN ── -->
+<div class="section" id="drawdown">
+  <div class="sec-header">
+    <span class="sec-num">02</span>
+    <span class="sec-title">Drawdown &amp; Risk of Ruin</span>
+    <span class="sec-sub">Circuit breakers + ruin probability</span>
+  </div>
+
+  <div class="g2">
+    <div class="card">
+      <div class="card-title">Current drawdown tracker</div>
+      <div class="inp-row">
+        <span class="inp-lbl">Starting balance</span>
+        <div class="inp-wrap"><span class="inp-prefix">$</span><input type="number" class="has-prefix" id="dd-start" value="19000" oninput="calcDD()"></div>
+      </div>
+      <div class="inp-row">
+        <span class="inp-lbl">Current balance</span>
+        <div class="inp-wrap"><span class="inp-prefix">$</span><input type="number" class="has-prefix" id="dd-current" value="18500" oninput="calcDD()"></div>
+      </div>
+      <div class="g3" style="margin-top:8px">
+        <div class="mcard"><div class="ml">Drawdown $</div><div class="mv" id="dd-dollar">—</div></div>
+        <div class="mcard"><div class="ml">Drawdown %</div><div class="mv" id="dd-pct">—</div></div>
+        <div class="mcard"><div class="ml">Status</div><div class="mv" style="font-size:16px" id="dd-status">—</div></div>
+      </div>
+      <div style="margin-top:10px">
+        <div style="font-size:11px;font-family:'DM Mono',monospace;color:var(--text3);margin-bottom:5px">Daily 3% · Weekly 5% · Hard stop 10%</div>
+        <div class="prog-wrap"><div class="prog-bar" id="dd-bar" style="width:0%;background:var(--green)"></div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Circuit breaker levels</div>
+      <div class="rule-line">
+        <div class="rule-icon" style="background:var(--green-d);color:var(--green)">3%</div>
+        <span class="rule-txt">Daily max loss — stand down rest of day</span>
+        <span class="rule-val" id="cb-daily">$570</span>
+      </div>
+      <div class="rule-line">
+        <div class="rule-icon" style="background:var(--amber-d);color:var(--amber)">5%</div>
+        <span class="rule-txt">Weekly max loss — observation only</span>
+        <span class="rule-val" id="cb-weekly">$950</span>
+      </div>
+      <div class="rule-line">
+        <div class="rule-icon" style="background:var(--red-d);color:var(--red)">10%</div>
+        <span class="rule-txt">Hard stop — reassess full strategy</span>
+        <span class="rule-val" id="cb-hard">$1,900</span>
+      </div>
+      <div class="rule-line">
+        <div class="rule-icon" style="background:var(--blue-d);color:var(--blue)">2L</div>
+        <span class="rule-txt">2 consecutive losses → A+ only next session</span>
+        <span class="rule-val" style="color:var(--blue)">Rule</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Risk of ruin metrics</div>
+    <div class="g4">
+      <div class="mcard"><div class="ml">Risk of ruin</div><div class="mv" id="ror-val">—</div><div class="ms">losing 20% of account</div></div>
+      <div class="mcard"><div class="ml">Losses to daily CB</div><div class="mv" id="ror-streak">—</div><div class="ms">consecutive losses</div></div>
+      <div class="mcard"><div class="ml">Kelly criterion</div><div class="mv" id="ror-kelly">—</div><div class="ms">optimal bet size</div></div>
+      <div class="mcard"><div class="ml">Half Kelly</div><div class="mv" id="ror-hkelly">—</div><div class="ms">conservative sizing</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── 03 BREAK-EVEN ── -->
+<div class="section" id="breakeven">
+  <div class="sec-header">
+    <span class="sec-num">03</span>
+    <span class="sec-title">Break-even &amp; Minimum Edge Finder</span>
+    <span class="sec-sub">Minimum win rate needed to be profitable at each RR</span>
+  </div>
+
+  <div class="g2">
+    <div class="card">
+      <div class="card-title">Custom RR break-even</div>
+      <div class="inp-row">
+        <span class="inp-lbl">Win amount ($)</span>
+        <div class="inp-wrap"><span class="inp-prefix">$</span><input type="number" class="has-prefix" id="be-win" value="760" oninput="calcBE()"></div>
+      </div>
+      <div class="inp-row">
+        <span class="inp-lbl">Loss amount ($)</span>
+        <div class="inp-wrap"><span class="inp-prefix">$</span><input type="number" class="has-prefix" id="be-loss" value="380" oninput="calcBE()"></div>
+      </div>
+      <div class="g2" style="margin-top:8px">
+        <div class="mcard neu"><div class="ml">Break-even WR</div><div class="mv neu" id="be-wr">—</div><div class="ms">minimum to not lose money</div></div>
+        <div class="mcard"><div class="ml">RR ratio</div><div class="mv" id="be-rr" style="color:var(--text)">—</div><div class="ms">win ÷ loss</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Break-even by grade</div>
+      <table class="sess-table">
+        <tr><th>Grade</th><th>Win $</th><th>Loss $</th><th>Min win rate</th></tr>
+        <tr><td><span class="badge b-green">A+</span></td><td>$760</td><td>$380</td><td id="be-ap">—</td></tr>
+        <tr><td><span class="badge b-blue">A</span></td><td>$570</td><td>$285</td><td id="be-a">—</td></tr>
+        <tr><td><span class="badge b-amber">B</span></td><td>$333</td><td>$190</td><td id="be-b">—</td></tr>
+        <tr><td><span class="badge b-purple">C</span></td><td>$95</td><td>$95</td><td id="be-c">—</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="chart-outer">
+    <div class="chart-lbl">Break-even win rate required across RR ratios 0.5R → 4R</div>
+    <div style="position:relative;height:180px"><canvas id="be-chart" role="img" aria-label="Break-even win rate required across different RR ratios">Break-even chart.</canvas></div>
+  </div>
+</div>
+
+<!-- ── 04 COMPOUNDER ── -->
+<div class="section" id="compounder">
+  <div class="sec-header">
+    <span class="sec-num">04</span>
+    <span class="sec-title">Account Growth Compounder</span>
+    <span class="sec-sub">Project account growth at different win rates over time</span>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Growth projections — your grade mix applied</div>
+    <div class="g2" style="margin-bottom:12px">
+      <div class="inp-row">
+        <span class="inp-lbl">Starting balance</span>
+        <div class="inp-wrap"><span class="inp-prefix">$</span><input type="number" class="has-prefix" id="comp-start" value="19000" oninput="calcComp()"></div>
+      </div>
+      <div class="inp-row">
+        <span class="inp-lbl">Projection months</span>
+        <input type="range" min="3" max="24" value="12" step="1" id="comp-months" oninput="calcComp()">
+        <span class="inp-unit" id="comp-months-out">12</span>
+      </div>
+    </div>
+    <div class="g4" style="margin-bottom:12px">
+      <div class="mcard neg"><div class="ml">At 45% WR</div><div class="mv neg" id="comp-45">—</div></div>
+      <div class="mcard pos"><div class="ml">At 55% WR</div><div class="mv pos" id="comp-55">—</div></div>
+      <div class="mcard pos"><div class="ml">At 60% WR</div><div class="mv pos" id="comp-60">—</div></div>
+      <div class="mcard pos"><div class="ml">At 65% WR</div><div class="mv pos" id="comp-65">—</div></div>
+    </div>
+    <div class="chart-outer" style="margin-top:0">
+      <div class="chart-lbl">Account growth curves — 45%, 55%, 60%, 65% win rates</div>
+      <div style="position:relative;height:240px"><canvas id="comp-chart" role="img" aria-label="Account growth projection across multiple win rates">Growth chart.</canvas></div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<footer>
+  <span class="ftxt">ICT / SMC · $19,000 account · MNQ · MES · MGC</span>
+  <span class="ftxt">Consistency &gt; Frequency &nbsp;·&nbsp; Selectivity &gt; Activity</span>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+var ACCT=19000;
+var evChart,beChart,compChart;
+
+var GRADES={
+  ap:{risk:380,win:760},
+  a: {risk:285,win:570},
+  b: {risk:190,win:333},
+  c: {risk:95, win:95}
+};
+
+function usd(v,plus){
+  if(isNaN(v))return'—';
+  return(plus&&v>0?'+':'')+(v<0?'-':'')+'$'+Math.abs(Math.round(v)).toLocaleString();
+}
+function pct(v){return(Math.round(v*10)/10)+'%';}
+function ev(w,win,loss){return w*win-(1-w)*loss;}
+
+function getMix(){
+  var ap=parseInt(document.getElementById('mix-ap').value)/100;
+  var a =parseInt(document.getElementById('mix-a').value)/100;
+  var b =parseInt(document.getElementById('mix-b').value)/100;
+  var c =parseInt(document.getElementById('mix-c').value)/100;
+  var tot=ap+a+b+c||1;
+  return{ap:ap/tot,a:a/tot,b:b/tot,c:c/tot};
+}
+
+function normMix(){
+  ['ap','a','b','c'].forEach(function(g){
+    document.getElementById('mix-'+g+'-out').textContent=document.getElementById('mix-'+g).value+'%';
+  });
+  var tot=['ap','a','b','c'].reduce(function(s,g){return s+parseInt(document.getElementById('mix-'+g).value);},0);
+  var el=document.getElementById('mix-total');
+  el.textContent='Total: '+tot+'%';
+  el.style.color=tot===100?'var(--green)':'var(--amber)';
+  calcAll();
+}
+
+function calcAll(){
+  var wr  =parseInt(document.getElementById('wr').value)/100;
+  var tpd =parseInt(document.getElementById('tpd').value);
+  var acct=parseFloat(document.getElementById('acct').value)||19000;
+  var tdy =parseInt(document.getElementById('tdy').value);
+  ACCT=acct;
+
+  document.getElementById('wr-out').textContent=Math.round(wr*100)+'%';
+  document.getElementById('tpd-out').textContent=tpd;
+  document.getElementById('tdy-out').textContent=tdy;
+
+  var mix=getMix();
+
+  var evAP=ev(wr,GRADES.ap.win,GRADES.ap.risk);
+  var evA =ev(wr,GRADES.a.win, GRADES.a.risk);
+  var evB =ev(wr,GRADES.b.win, GRADES.b.risk);
+  var evC =ev(wr,GRADES.c.win, GRADES.c.risk);
+
+  function setGC(id,val){
+    var el=document.getElementById(id);
+    el.textContent='EV: '+usd(val,true)+' / trade';
+    el.style.color=val>0?'var(--green)':'var(--red)';
+  }
+  setGC('ev-ap',evAP);setGC('ev-a',evA);setGC('ev-b',evB);setGC('ev-c',evC);
+
+  var wEV=evAP*mix.ap+evA*mix.a+evB*mix.b+evC*mix.c;
+  var daily=wEV*tpd;
+
+  function setM(id,val,cid){
+    var el=document.getElementById(id);
+    el.textContent=usd(val,true);
+    el.className='mv '+(val>0?'pos':val<0?'neg':'');
+    if(cid){var c=document.getElementById(cid);if(c)c.className='mcard '+(val>0?'pos':val<0?'neg':'');}
+  }
+  setM('ev-daily',  daily,     'mc-daily');
+  setM('ev-weekly', daily*5,   'mc-weekly');
+  setM('ev-monthly',daily*21,  'mc-monthly');
+  setM('ev-annual', daily*tdy, 'mc-annual');
+
+  var hEdge=document.getElementById('h-edge');
+  hEdge.textContent=usd(wEV,true);
+  hEdge.style.color=wEV>0?'var(--green)':'var(--red)';
+  var hAnn=document.getElementById('h-annual');
+  hAnn.textContent=usd(daily*tdy,true);
+  hAnn.style.color=daily*tdy>0?'var(--green)':'var(--red)';
+
+  var q=1-wr;
+  var ror=wr>q?Math.pow(q/wr,4)*100:100;
+  document.getElementById('h-ruin').textContent=Math.round(ror)+'%';
+
+  updateEVChart(tpd,mix);
+  calcDD();calcBE();calcComp();calcROR(wr);
+}
+
+function updateEVChart(tpd,mix){
+  var labels=Array.from({length:61},function(_,i){return(25+i)+'%'});
+  var data=Array.from({length:61},function(_,i){
+    var w=(25+i)/100;
+    return Math.round((ev(w,GRADES.ap.win,GRADES.ap.risk)*mix.ap
+                      +ev(w,GRADES.a.win, GRADES.a.risk)*mix.a
+                      +ev(w,GRADES.b.win, GRADES.b.risk)*mix.b
+                      +ev(w,GRADES.c.win, GRADES.c.risk)*mix.c)*tpd);
+  });
+
+  if(!evChart){
+    evChart=new Chart(document.getElementById('ev-chart'),{
+      type:'line',
+      data:{labels:labels,datasets:[{label:'Daily EV',data:data,borderColor:'#00d492',borderWidth:2,pointRadius:0,tension:0.35,fill:{target:{value:0},above:'rgba(0,212,146,0.08)',below:'rgba(255,90,90,0.08)'}}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return' '+usd(c.parsed.y,true);}}}},scales:{x:{ticks:{color:'#454d5c',font:{size:10},maxTicksLimit:10},grid:{color:'rgba(255,255,255,0.06)'}},y:{ticks:{color:'#454d5c',font:{size:10},callback:function(v){return usd(v,true);}},grid:{color:'rgba(255,255,255,0.06)'}}}}
+    });
+  } else {
+    evChart.data.datasets[0].data=data;
+    evChart.update('none');
+  }
+}
+
+function calcDD(){
+  var start  =parseFloat(document.getElementById('dd-start').value)||19000;
+  var current=parseFloat(document.getElementById('dd-current').value)||start;
+  var dd=start-current;
+  var ddPct=(dd/start)*100;
+
+  document.getElementById('cb-daily').textContent  =usd(start*0.03);
+  document.getElementById('cb-weekly').textContent =usd(start*0.05);
+  document.getElementById('cb-hard').textContent   =usd(start*0.10);
+
+  var ddEl=document.getElementById('dd-dollar');
+  var ppEl=document.getElementById('dd-pct');
+  var stEl=document.getElementById('dd-status');
+  var barEl=document.getElementById('dd-bar');
+
+  ddEl.textContent=usd(dd);
+  ppEl.textContent=pct(ddPct);
+
+  barEl.style.width=Math.min(100,(ddPct/10)*100)+'%';
+
+  if(ddPct<=0){
+    stEl.textContent='Profit';stEl.style.color='var(--green)';barEl.style.background='var(--green)';
+    ddEl.style.color='var(--green)';ppEl.style.color='var(--green)';
+  } else if(ddPct<3){
+    stEl.textContent='OK';stEl.style.color='var(--green)';barEl.style.background='var(--green)';
+    ddEl.style.color='var(--amber)';ppEl.style.color='var(--amber)';
+  } else if(ddPct<5){
+    stEl.textContent='Warning';stEl.style.color='var(--amber)';barEl.style.background='var(--amber)';
+    ddEl.style.color='var(--amber)';ppEl.style.color='var(--amber)';
+  } else if(ddPct<10){
+    stEl.textContent='Circuit break';stEl.style.color='var(--red)';barEl.style.background='var(--red)';
+    ddEl.style.color='var(--red)';ppEl.style.color='var(--red)';
+  } else {
+    stEl.textContent='HARD STOP';stEl.style.color='var(--red)';barEl.style.background='var(--red)';
+    ddEl.style.color='var(--red)';ppEl.style.color='var(--red)';
+  }
+}
+
+function calcROR(wr){
+  var q=1-wr;
+  var ror=wr>q?Math.pow(q/wr,4)*100:100;
+  var el=document.getElementById('ror-val');
+  el.textContent=Math.round(ror)+'%';
+  el.style.color=ror<10?'var(--green)':ror<30?'var(--amber)':'var(--red)';
+
+  var start=parseFloat(document.getElementById('dd-start').value)||19000;
+  var avgRisk=GRADES.ap.risk*0.2+GRADES.a.risk*0.4+GRADES.b.risk*0.3+GRADES.c.risk*0.1;
+  var streak=Math.ceil((start*0.03)/avgRisk);
+  document.getElementById('ror-streak').textContent=streak+' losses';
+
+  var kelly=Math.max(0,wr-(1-wr))*100;
+  document.getElementById('ror-kelly').textContent=kelly.toFixed(1)+'%';
+  document.getElementById('ror-hkelly').textContent=(kelly/2).toFixed(1)+'%';
+}
+
+function calcBE(){
+  var win =parseFloat(document.getElementById('be-win').value)||760;
+  var loss=parseFloat(document.getElementById('be-loss').value)||380;
+  var rr  =loss>0?win/loss:0;
+  var beWR=loss>0?(loss/(win+loss))*100:50;
+
+  document.getElementById('be-wr').textContent=Math.round(beWR*10)/10+'%';
+  document.getElementById('be-rr').textContent=rr.toFixed(2)+'R';
+
+  [{id:'be-ap',win:760,loss:380},{id:'be-a',win:570,loss:285},{id:'be-b',win:333,loss:190},{id:'be-c',win:95,loss:95}]
+  .forEach(function(g){
+    document.getElementById(g.id).textContent=Math.round((g.loss/(g.win+g.loss))*1000)/10+'%';
+  });
+
+  if(!beChart){
+    var labels=[],data=[];
+    for(var r=0.5;r<=4.05;r+=0.25){labels.push(r.toFixed(2)+'R');data.push(Math.round((1/(1+r))*1000)/10);}
+    beChart=new Chart(document.getElementById('be-chart'),{
+      type:'line',
+      data:{labels:labels,datasets:[{label:'Break-even WR',data:data,borderColor:'#4a9eff',borderWidth:2,pointRadius:3,pointBackgroundColor:'#4a9eff',tension:0.3,fill:{target:{value:50},above:'rgba(255,90,90,0.08)',below:'rgba(0,212,146,0.08)'}}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return' '+c.parsed.y+'% win rate needed';}}}},scales:{x:{ticks:{color:'#454d5c',font:{size:10},maxTicksLimit:10},grid:{color:'rgba(255,255,255,0.06)'}},y:{min:0,max:80,ticks:{color:'#454d5c',font:{size:10},callback:function(v){return v+'%';}},grid:{color:'rgba(255,255,255,0.06)'}}}}
+    });
+  }
+}
+
+function calcComp(){
+  var start =parseFloat(document.getElementById('comp-start').value)||19000;
+  var months=parseInt(document.getElementById('comp-months').value);
+  document.getElementById('comp-months-out').textContent=months;
+
+  var tpd=parseInt(document.getElementById('tpd').value)||3;
+  var mix=getMix();
+
+  function proj(wr){
+    var wEV=ev(wr,GRADES.ap.win,GRADES.ap.risk)*mix.ap
+           +ev(wr,GRADES.a.win, GRADES.a.risk)*mix.a
+           +ev(wr,GRADES.b.win, GRADES.b.risk)*mix.b
+           +ev(wr,GRADES.c.win, GRADES.c.risk)*mix.c;
+    return start+wEV*tpd*months*21;
+  }
+
+  [[0.45,'comp-45'],[0.55,'comp-55'],[0.60,'comp-60'],[0.65,'comp-65']].forEach(function(d){
+    var val=proj(d[0]);
+    var el=document.getElementById(d[1]);
+    el.textContent='$'+Math.round(val).toLocaleString();
+    el.className='mv '+(val>start?'pos':'neg');
+  });
+
+  var labels=Array.from({length:months+1},function(_,i){return'M'+i});
+  var datasets=[
+    {wr:0.45,color:'#ff5a5a',label:'45%'},
+    {wr:0.55,color:'#ffb340',label:'55%'},
+    {wr:0.60,color:'#4a9eff',label:'60%'},
+    {wr:0.65,color:'#00d492',label:'65%'}
+  ].map(function(d){
+    var wEV=ev(d.wr,GRADES.ap.win,GRADES.ap.risk)*mix.ap
+           +ev(d.wr,GRADES.a.win, GRADES.a.risk)*mix.a
+           +ev(d.wr,GRADES.b.win, GRADES.b.risk)*mix.b
+           +ev(d.wr,GRADES.c.win, GRADES.c.risk)*mix.c;
+    var dailyEV=wEV*tpd;
+    return{label:d.label,data:Array.from({length:months+1},function(_,m){return Math.round(start+dailyEV*m*21);}),borderColor:d.color,borderWidth:2,pointRadius:0,tension:0.3,fill:false};
+  });
+
+  if(!compChart){
+    compChart=new Chart(document.getElementById('comp-chart'),{
+      type:'line',
+      data:{labels:labels,datasets:datasets},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,labels:{color:'#7c8494',font:{size:11},boxWidth:12,padding:16}}},scales:{x:{ticks:{color:'#454d5c',font:{size:10}},grid:{color:'rgba(255,255,255,0.06)'}},y:{ticks:{color:'#454d5c',font:{size:10},callback:function(v){return'$'+Math.round(v/1000)+'k';}},grid:{color:'rgba(255,255,255,0.06)'}}}}
+    });
+  } else {
+    compChart.data.labels=labels;
+    compChart.data.datasets=datasets;
+    compChart.update('none');
+  }
+}
+
+window.addEventListener('load',function(){
+  normMix();
+  calcAll();
+  calcBE();
+});
+</script>
+</body>
+</html>

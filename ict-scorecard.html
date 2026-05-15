@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mushrit ICT Pre-Trade Scorecard</title>
+<title>ICT Pre-Trade Scorecard</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -19,7 +19,7 @@
   --r:8px;--rl:12px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Syne',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:2rem 1rem 5rem}
+body{font-family:'Syne',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:1rem 1rem 5rem}
 .wrap{max-width:760px;margin:0 auto}
 
 header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border)}
@@ -174,6 +174,19 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--border);displ
 </style>
 </head>
 <body>
+
+<!-- SITE NAV -->
+<nav style="position:sticky;top:0;z-index:200;background:rgba(10,12,15,0.95);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,0.07);padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;height:48px;font-family:'DM Mono',monospace">
+  <div style="display:flex;align-items:center;gap:10px">
+    <span style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:#00d492;letter-spacing:-.01em">ICT</span>
+    <span style="font-size:10px;color:#555a66;letter-spacing:.12em;text-transform:uppercase">SMC · Futures</span>
+  </div>
+  <div style="display:flex;gap:4px">
+    <a href="ict-scorecard.html" style="font-size:11px;padding:5px 12px;border-radius:6px;text-decoration:none;background:rgba(0,212,146,0.12);color:#00d492;border:1px solid rgba(0,212,146,0.3);letter-spacing:.04em">Scorecard</a>
+    <a href="ict-calculator.html" style="font-size:11px;padding:5px 12px;border-radius:6px;text-decoration:none;color:#555a66;border:1px solid rgba(255,255,255,0.07);letter-spacing:.04em">Calculator</a>
+  </div>
+</nav>
+
 <div class="wrap">
 
 <header>
